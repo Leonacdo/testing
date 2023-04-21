@@ -1,0 +1,96 @@
+{% extends 'store/base.html' %}
+
+
+{% block content %}
+  {% load static %}
+  {% load crispy_forms_tags %}
+      <!--Products-->
+      <div class="container py-3">
+        <h1 class="font-weight-bold">Products</h1>
+        <hr>
+        <br>
+        <div class="row">
+          {% for p in page_obj %}
+          <div class="col-sm-12 col-md-6 col-lg-3 pb-4">
+            <div class="card h-100 shadow" style="border:none"> 				
+              <img src="{{ p.image.url }}" class="card-img-top" alt="{{ p.name }}" style="width: auto; height: 250px; object-fit: scale-down;">
+              <div class="card-body">
+                <h5 class="card-title">{{ p.name }}</h5>
+                <p class="card-text text-muted" style="font-size:12px">{{ p.type }}</p>
+                <p class="card-text">{{ p.description }}</p>
+                <div class="row">
+                  <div class="col-3 text-center">
+                    {% if user.is_authenticated %}
+                      <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" value="{{p.pk}}" name="product_pk">
+                        <button type="submit" class="btn btn-outline-primary" style="font-size:18px; border-radius: 50%">★</button>
+                      </form>
+                    {% else %}
+                      <a href="/register" class="btn btn-outline-primary" style="font-size:18px; border-radius: 50%">★</a>
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="col-4 text-center">
+                  <a class="btn btn-outline-primary" data-bs-toggle="collapse" href="#collapse{{p.pk}}" role="button" aria-expanded="false" aria-controls="collapse{{p.pk}}">Review</a>
+                </div>
+                <div class="col-5 text-center">
+                  <a href="#" class="btn btn-warning">Buy now</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="collapse" id="collapse{{p.pk}}">
+            <div class="card card-body shadow">
+              <h6>Product Score: {{ p.product_name }}</h6>
+              <hr>
+              <form method="post">
+									     {% csrf_token %}
+									     {% for field in vote_form %}
+										    <div class="row">
+											     <div class="col-10" id="slider_{{field.name}}_{{p.pk}}" onclick="sliderUpdate('{{field.name}}', {{p.pk}})">{{field|as_crispy_field}}</div>
+											     <div class="col-2 my-auto">
+												      <h6 class="text-center"><span id="score_{{field.name}}_{{p.pk}}"  class=text-primary>5</span></h6>
+											     </div>
+										    </div>
+									   {% endfor %}
+									   <div class="text-right">
+										    {% if user.is_authenticated %}
+											     <input type="hidden" value="{{p.pk}}" name="product">
+										      <button type="submit" name="score_submit" class="btn btn-outline-primary">Submit Score</button>
+										    {% else %}
+											     <a href="/register" class="btn btn-outline-primary">Register</a>
+										    {% endif %}
+									     </div>
+									   </form>
+									 </div>
+								</div>
+						
+	
+         
+         	{% endfor %}
+          </div>
+          <!--Pagination-->
+          <div class="container">
+            <div class="pagination justify-content-center">
+              <span class="step-links">
+                {% if page_obj.has_previous %}
+                  <a href="?page=1">&laquo; first</a>
+                  <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+              <span class="current"> Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} </span>
+              {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a> 
+              {% endif %}
+            </span>
+          </div>
+        </div>
+      </div>
+      <script>
+        function sliderUpdate(field, pk) {
+            document.getElementById("score_" + field + "_" + pk).innerText = document.getElementById("slider_" + field + "_" + pk).getElementsByClassName(field)[0].value ;
+        }
+      </script> 
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+<section id="top" class="bg-light">
+  <div class="container my-4 border">
+    <div class="row align-items-center">
+      <div class="col text-md-center">
+        <h1>Hello</h1>
+        <h4 class="text-muted">This is my bootstrap</h4>
+        <a href="#middle" class="btn btn-info">Buy now</a>
+        <a href="#sidebar" class="btn btn-info" data-bs-toggle="offcanvas" role="button" aria-controls="sidebar">expand</a>
+      </div>
+      <div class="col">
+        <img class="img-fluid" src='static/img/cta-headphones.jpg'>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <!-- need edit -->
+<section class="bg-light">
+  <div class="container my-4 border">
+    <div class="row align-items-center">
+      <div class="col text-md-center">
+        <h1>Hello</h1>
+        <h4 class="text-muted">This is my bootstrap</h4>
+        <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#reg-modal">Edit</button>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+  <!-- modal -->
+<div class="modal fade" id="reg-modal" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal-title">Update</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Type here</p>
+        <label for="modal-email" class="form-label" id="modal-email" placeholder="e.g.mario@gmail.com">
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-primary" data-bs-dismiss="modal">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- cards -->
+<section id="middle" class="bg-light">
+  <div class="container my-5">
+    <div class="row align-items-center">
+      {% for product in products %}
+      <div class="col-md-6 my-4">
+        <div class="card border-0 shadow">
+          <img src="{{ product.image.url }}" class="img-fluid">
+          <div class="card-body text-center py-4">
+            
+            <h4 class="card-title">{{ product.name }}</h4>
+            <p class="lead card-subtitle text-muted">{{ product.description }}</p>
+            <p class="display-7 mt-4 text-primary fw-bold">${{ product.price }}</p>
+            <a href="#top" class="btn btn-outline-primary mt-3">Buy now</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+  <!-- offcanvas -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="sidebar" aria-labelledby="sidebar-label">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="sidebar-label">My Info</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <p>Hello my name is Canh</p>
+  </div>
+</div>
+
+{% endblock %}
